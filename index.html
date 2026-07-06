@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IGCSE Language Vocabulary Quiz</title>
+<meta name="theme-color" content="#173F35">
+<meta name="description" content="IGCSE vocabulary quiz for Malay, Chinese (Simplified), and Korean — choose your topics and take 30-question MCQ tests with a results dashboard.">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23173F35'/%3E%3Ctext x='50' y='68' font-size='58' text-anchor='middle' fill='%23E7C766'%3E%E2%9C%B7%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23173F35'/%3E%3Ctext x='50' y='68' font-size='58' text-anchor='middle' fill='%23E7C766'%3E%E2%9C%B7%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@500;700&family=Noto+Sans+KR:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pine:#173F35;
+    --pine-deep:#0E2B24;
+    --hibiscus:#C8372F;
+    --gold:#E7C766;
+    --ivory:#F6F1E4;
+    --ink:#20211B;
+    --leaf:#4C7A63;
+    --line: rgba(246,241,228,0.14);
+    --radius: 18px;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background: radial-gradient(ellipse at top, #1D4B3F 0%, var(--pine) 45%, var(--pine-deep) 100%);
+    color: var(--ivory);
+    font-family:'Plus Jakarta Sans', system-ui, sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .hibiscus-field{
+    position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.10;
+    background-image:
+      radial-gradient(circle at 15% 20%, var(--hibiscus) 0, transparent 40%),
+      radial-gradient(circle at 85% 15%, var(--gold) 0, transparent 35%),
+      radial-gradient(circle at 75% 85%, var(--hibiscus) 0, transparent 40%),
+      radial-gradient(circle at 10% 80%, var(--gold) 0, transparent 35%);
+  }
+  #app{position:relative; z-index:1; max-width:640px; margin:0 auto; padding:22px 18px 48px; min-height:100vh; display:flex; flex-direction:column;}
+  h1,h2,h3{font-family:'Fraunces', serif; margin:0; font-weight:600;}
+  .eyebrow{
+    font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold);
+    font-weight:700; display:flex; align-items:center; gap:8px;
+  }
+  .eyebrow::before{content:"✷"; color:var(--hibiscus);}
+  header.top{ padding:6px 2px 26px; text-align:center;}
+  header.top h1{ font-size: clamp(24px,7vw,34px); line-height:1.1; margin-top:8px;}
+  header.top p{ color: rgba(246,241,228,0.72); font-size:14px; margin-top:8px;}
+  .card{
+    background: linear-gradient(180deg, rgba(246,241,228,0.06), rgba(246,241,228,0.03));
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+    backdrop-filter: blur(6px);
+  }
+  .screen{display:flex; flex-direction:column; gap:18px; flex:1;}
+  .hidden{display:none !important;}
+  .link-back{
+    background:none; border:none; color: rgba(246,241,228,0.6); font-family:inherit;
+    font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; cursor:pointer; padding:4px 0;
+  }
+  .link-back:hover{ color: var(--gold); }
+
+  /* LANGUAGE SELECT SCREEN */
+  .lang-grid{ display:flex; flex-direction:column; gap:14px; margin-top:6px; }
+  .lang-card{
+    display:flex; align-items:center; gap:16px; text-align:left;
+    background: linear-gradient(180deg, rgba(246,241,228,0.07), rgba(246,241,228,0.03));
+    border:1.5px solid var(--line); border-radius:20px; padding:18px 20px; cursor:pointer;
+    transition: border-color .15s ease, transform .12s ease;
+  }
+  .lang-card:hover{ border-color: var(--gold); transform: translateY(-1px); }
+  .lang-card:active{ transform: scale(0.98); }
+  .lang-flag{ font-size:34px; line-height:1; flex:none; width:52px; text-align:center; }
+  .lang-info{ flex:1; }
+  .lang-name{ font-family:'Fraunces',serif; font-size:19px; font-weight:700; color:var(--ivory); }
+  .lang-native{ font-size:13px; color: var(--gold); margin-top:1px; }
+  .lang-meta{ font-size:12px; color:rgba(246,241,228,0.55); margin-top:4px; }
+  .lang-arrow{ font-size:20px; color:rgba(246,241,228,0.4); flex:none; }
+
+  /* START SCREEN */
+  .section-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .topic-actions{ display:flex; gap:14px; }
+  .topic-actions button{
+    background:none; border:none; color:var(--gold); font-family:inherit; font-size:12px; font-weight:700; cursor:pointer; padding:0;
+  }
+  .topic-actions button:hover{ text-decoration:underline; }
+  .topic-chip{
+    display:inline-flex; align-items:center; gap:6px; cursor:pointer;
+    font-size:12.5px; padding:7px 13px; border-radius:999px;
+    background:rgba(255,255,255,0.03); border:1.5px solid var(--line); color:rgba(246,241,228,0.5);
+    margin:3px 4px 3px 0; font-weight:600; transition: all .12s ease;
+  }
+  .topic-chip.active{
+    background:rgba(231,199,102,0.14); border-color: var(--gold); color:var(--gold); font-weight:700;
+  }
+  .topics-wrap{display:flex; flex-wrap:wrap; margin-top:10px;}
+  .topic-warning{ font-size:12.5px; color:#F0A39D; margin-top:8px; }
+  .btn{
+    appearance:none; border:none; cursor:pointer; font-family:inherit;
+    font-weight:700; font-size:15px; border-radius:14px; padding:16px 20px;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    transition: transform .12s ease, box-shadow .12s ease, background .2s ease, opacity .15s ease;
+  }
+  .btn:active{transform:scale(0.98);}
+  .btn:disabled{ opacity:0.45; cursor:not-allowed; box-shadow:none !important; }
+  .btn-primary{
+    background: linear-gradient(180deg, var(--hibiscus), #A8281F);
+    color: var(--ivory);
+    box-shadow: 0 10px 24px rgba(200,55,47,0.35);
+  }
+  .btn-primary:hover{box-shadow:0 12px 28px rgba(200,55,47,0.5);}
+  .btn-ghost{
+    background: transparent; border:1.5px solid var(--line); color: var(--ivory);
+  }
+  .btn-ghost:hover{border-color: var(--gold); color:var(--gold);}
+  .stat-row{display:flex; gap:10px; margin-top:14px;}
+  .stat-box{flex:1; text-align:center; padding:14px 6px; border-radius:14px; background:rgba(255,255,255,0.04); border:1px solid var(--line);}
+  .stat-box .num{font-family:'Fraunces',serif; font-size:22px; color:var(--gold);}
+  .stat-box .lbl{font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:rgba(246,241,228,0.6); margin-top:2px;}
+
+  /* QUIZ SCREEN */
+  .progress-wrap{display:flex; align-items:center; gap:12px;}
+  .progress-track{flex:1; height:8px; border-radius:999px; background:rgba(255,255,255,0.1); overflow:hidden;}
+  .progress-fill{height:100%; background:linear-gradient(90deg,var(--gold),var(--hibiscus)); border-radius:999px; transition:width .3s ease;}
+  .progress-txt{font-size:12.5px; font-weight:700; color:var(--gold); white-space:nowrap;}
+  .cat-tag{
+    align-self:flex-start; font-size:11.5px; text-transform:uppercase; letter-spacing:.08em;
+    color: var(--leaf); background: rgba(76,122,99,0.18); border:1px solid rgba(76,122,99,0.4);
+    padding:4px 10px; border-radius:999px; font-weight:700;
+  }
+  .prompt-word{
+    font-family:'Fraunces', serif; font-size: clamp(28px, 8vw, 40px); font-weight:700;
+    color: var(--ivory); text-align:center; margin: 10px 0 0;
+  }
+  .prompt-word.script-zh{ font-family:'Noto Sans SC', sans-serif; }
+  .prompt-word.script-ko{ font-family:'Noto Sans KR', sans-serif; }
+  .prompt-roman{ text-align:center; font-size:15px; color:var(--gold); font-weight:600; margin-top:4px; }
+  .prompt-sub{text-align:center; font-size:13px; color:rgba(246,241,228,0.55); margin-top:4px;}
+  .choices{display:flex; flex-direction:column; gap:11px; margin-top:6px;}
+  .choice{
+    text-align:left; background: rgba(255,255,255,0.045); border:1.5px solid var(--line);
+    color:var(--ivory); border-radius:14px; padding:12px 16px; font-size:16px; font-weight:600;
+    display:flex; gap:12px; align-items:center;
+  }
+  .choice .letter{
+    width:26px; height:26px; border-radius:8px; background:rgba(231,199,102,0.15);
+    color:var(--gold); font-size:12.5px; display:flex; align-items:center; justify-content:center; font-weight:800; flex:none;
+  }
+  .choice-body{ display:flex; flex-direction:column; gap:2px; }
+  .choice-main.script-zh{ font-family:'Noto Sans SC', sans-serif; font-size:18px; }
+  .choice-main.script-ko{ font-family:'Noto Sans KR', sans-serif; font-size:17px; }
+  .choice-sub{ font-size:11.5px; font-weight:600; color: rgba(246,241,228,0.5); }
+  .choice:hover{border-color:rgba(231,199,102,0.5);}
+  .choice.correct{background:rgba(76,122,99,0.28); border-color:#6FAE8B; color:#EAF6EF;}
+  .choice.correct .letter{background:#6FAE8B; color:#0E2B24;}
+  .choice.wrong{background:rgba(200,55,47,0.22); border-color:var(--hibiscus);}
+  .choice.wrong .letter{background:var(--hibiscus); color:#fff;}
+  .choice.disabled{pointer-events:none; opacity:0.85;}
+
+  .next-wrap{min-height:52px; display:flex; justify-content:flex-end;}
+
+  /* RESULTS DASHBOARD */
+  .score-hero{text-align:center; padding: 8px 0 4px;}
+  .score-ring{
+    width:150px; height:150px; margin:6px auto 10px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; position:relative;
+    background: conic-gradient(var(--gold) calc(var(--pct)*1%), rgba(255,255,255,0.08) 0);
+  }
+  .score-ring::before{content:""; position:absolute; inset:9px; border-radius:50%; background: var(--pine-deep);}
+  .score-ring .score-txt{position:relative; font-family:'Fraunces',serif; font-size:32px; color:var(--ivory); font-weight:700;}
+  .score-ring .score-den{position:relative; font-size:12px; color:rgba(246,241,228,0.6); margin-top:-4px;}
+  .score-msg{color:var(--gold); font-weight:700; font-size:14.5px; margin-top:4px;}
+
+  .section-title{
+    font-family:'Fraunces',serif; font-size:18px; margin: 6px 0 2px; display:flex; align-items:center; gap:8px;
+  }
+  .bar-row{display:flex; align-items:center; gap:10px; margin:9px 0;}
+  .bar-label{width:118px; flex:none; font-size:12.5px; font-weight:600; color:rgba(246,241,228,0.85); line-height:1.25;}
+  .bar-track{flex:1; height:12px; border-radius:999px; background:rgba(255,255,255,0.08); overflow:hidden;}
+  .bar-fill{height:100%; border-radius:999px;}
+  .bar-pct{width:38px; flex:none; font-size:12px; text-align:right; color:rgba(246,241,228,0.7); font-weight:700;}
+
+  .callout{
+    border-radius:14px; padding:14px 16px; font-size:13.5px; line-height:1.5; margin-top:6px;
+  }
+  .callout.weak{background:rgba(200,55,47,0.14); border:1px solid rgba(200,55,47,0.4);}
+  .callout.strong{background:rgba(76,122,99,0.18); border:1px solid rgba(111,174,139,0.4);}
+  .callout b{color:var(--gold);}
+
+  .review-item{border-top:1px solid var(--line); padding:12px 0; font-size:13.5px;}
+  .review-item:first-child{border-top:none;}
+  .review-q{font-weight:700; color:var(--ivory); margin-bottom:4px;}
+  .review-a{color:rgba(246,241,228,0.75);}
+  .tag-ok{color:#9FD6B8;}
+  .tag-x{color:#F0A39D;}
+
+  footer.credit{
+    text-align:center; font-size:11.5px; color:rgba(246,241,228,0.35); margin-top:26px; letter-spacing:.03em;
+  }
+  ::selection{background:var(--gold); color:var(--pine-deep);}
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+</style>
+</head>
+<body>
+<div class="hibiscus-field"></div>
+<div id="app">
+
+  <header class="top">
+    <div class="eyebrow">IGCSE · Foreign Language Vocabulary</div>
+    <h1 id="pageTitle">Vocabulary Quiz</h1>
+    <p id="pageSub">30-question multiple choice vocabulary tests, drawn from IGCSE Foreign Language syllabuses — with a results dashboard that shows exactly where to revise.</p>
+  </header>
+
+  <!-- LANGUAGE SELECT SCREEN -->
+  <section id="screen-language" class="screen">
+    <div class="card">
+      <h2 style="font-size:19px;">Choose a language</h2>
+      <p style="color:rgba(246,241,228,0.6); font-size:13px; margin-top:6px;">Pick which IGCSE vocabulary you want to be tested on.</p>
+      <div class="lang-grid" id="langGrid"></div>
+    </div>
+  </section>
+
+  <!-- START SCREEN -->
+  <section id="screen-start" class="screen hidden">
+    <button class="link-back" id="backToLang">← Change language</button>
+    <div class="card">
+      <div class="section-row">
+        <h2 style="font-size:19px;" id="topicsHeading">Choose topics</h2>
+        <div class="topic-actions">
+          <button id="selectAllBtn">Select all</button>
+          <button id="clearAllBtn">Clear all</button>
+        </div>
+      </div>
+      <p style="color:rgba(246,241,228,0.55); font-size:12.5px; margin-top:6px;">Tap a topic to include or exclude it from your test.</p>
+      <div class="topics-wrap" id="topicChips"></div>
+      <div class="topic-warning hidden" id="topicWarning">Select at least one topic to start a test.</div>
+      <div class="stat-row">
+        <div class="stat-box"><div class="num" id="questionCountStat">30</div><div class="lbl">Questions</div></div>
+        <div class="stat-box"><div class="num" id="bankCount">—</div><div class="lbl">Words selected</div></div>
+        <div class="stat-box"><div class="num" id="testsTaken">0</div><div class="lbl">Tests taken</div></div>
+      </div>
+    </div>
+    <button class="btn btn-primary" id="startBtn" style="margin-top:4px;">Start Test</button>
+    <p style="text-align:center; font-size:12px; color:rgba(246,241,228,0.5); margin-top:-8px;" id="directionNote">Each test mixes both translation directions across your selected topics.</p>
+  </section>
+
+  <!-- QUIZ SCREEN -->
+  <section id="screen-quiz" class="screen hidden">
+    <div class="progress-wrap">
+      <span class="progress-txt" id="qCounter">1 / 30</span>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <span class="progress-txt" id="scoreLive">0 ✓</span>
+    </div>
+    <div class="card" style="flex:1; display:flex; flex-direction:column; gap:14px;">
+      <span class="cat-tag" id="catTag">Topic</span>
+      <div>
+        <div class="prompt-word" id="promptWord">word</div>
+        <div class="prompt-roman" id="promptRoman"></div>
+        <div class="prompt-sub" id="promptSub">What does this word mean?</div>
+      </div>
+      <div class="choices" id="choicesWrap"></div>
+    </div>
+    <div class="next-wrap">
+      <button class="btn btn-primary hidden" id="nextBtn">Next →</button>
+    </div>
+  </section>
+
+  <!-- RESULTS SCREEN -->
+  <section id="screen-results" class="screen hidden">
+    <div class="card score-hero">
+      <div class="eyebrow" style="justify-content:center;">Test complete</div>
+      <div class="score-ring" id="scoreRing" style="--pct:0;">
+        <div style="text-align:center;">
+          <div class="score-txt" id="scoreVal">0</div>
+          <div class="score-den" id="scoreDen">out of 30</div>
+        </div>
+      </div>
+      <div class="score-msg" id="scoreMsg">—</div>
+    </div>
+
+    <div class="card">
+      <h3 class="section-title">📊 Topic breakdown</h3>
+      <div id="barChart"></div>
+    </div>
+
+    <div class="card">
+      <h3 class="section-title">✷ Where you stand</h3>
+      <div id="strengthCallout"></div>
+      <div id="weaknessCallout"></div>
+    </div>
+
+    <div class="card">
+      <h3 class="section-title">🔎 Review missed words</h3>
+      <div id="reviewList" style="margin-top:6px;"></div>
+    </div>
+
+    <button class="btn btn-primary" id="retryBtn">Try Another Test</button>
+    <button class="btn btn-ghost" id="homeBtn">Back to Topics</button>
+    <button class="link-back" id="switchLangBtn" style="align-self:center;">Switch language</button>
+  </section>
+
+  <footer class="credit">Built for IGCSE language revision · Works offline once installed</footer>
+</div>
+
+<script>
+/* ============================================================
+   LANGUAGE BANKS
+   Each entry is [native, romanization|null, english]
+   Malay uses the Latin script already, so romanization is omitted.
+   ============================================================ */
+
+const MALAY_TOPICS = {
+  "Greetings & Introductions": [
+    ["selamat pagi","good morning"],["selamat petang","good afternoon"],["selamat malam","good night"],
+    ["apa khabar","how are you"],["nama saya","my name is"],["jumpa lagi","see you again"],
+    ["terima kasih","thank you"],["sama-sama","you're welcome"],["maaf","sorry"],["tolong","please / help"],
+    ["selamat tinggal","goodbye (to the one staying)"],["selamat jalan","goodbye (to the one leaving)"],
+    ["kawan","friend"],["jiran","neighbour"],["tuan","sir"],["puan","madam"],
+    ["selamat datang","welcome"],["assalamualaikum","peace be upon you (greeting)"],["encik","Mr"],["cik","Miss"],
+    ["umur","age"],["berapa umur awak","how old are you"],["dari mana","where are you from"],["saya berasal dari","I come from"],
+    ["gembira berkenalan","pleased to meet you"],["sudah lama tidak jumpa","long time no see"],["ya","yes"],["tidak","no"],
+    ["boleh","may / can"],["silakan","please, go ahead"],["baik","fine / well"],["kurang sihat","not very well"]
+  ],
+  "Family": [
+    ["ibu","mother"],["bapa","father"],["abang","older brother"],["kakak","older sister"],
+    ["adik","younger sibling"],["datuk","grandfather"],["nenek","grandmother"],["anak","child"],
+    ["suami","husband"],["isteri","wife"],["sepupu","cousin"],["mak cik","aunty"],
+    ["pak cik","uncle"],["keluarga","family"],["anak lelaki","son"],["anak perempuan","daughter"],
+    ["abang ipar","brother-in-law"],["kakak ipar","sister-in-law"],["mentua","parent-in-law"],["menantu","son/daughter-in-law"],
+    ["cucu","grandchild"],["anak yatim","orphan"],["bujang","single / bachelor"],["berkahwin","married"],
+    ["bercerai","divorced"],["balu","widow"],["duda","widower"],["adik-beradik","siblings"],
+    ["keluarga besar","extended family"],["keluarga angkat","foster family"]
+  ],
+  "School": [
+    ["sekolah","school"],["guru","teacher"],["murid","student"],["kelas","classroom"],
+    ["buku","book"],["pensel","pencil"],["peperiksaan","examination"],["kerja rumah","homework"],
+    ["perpustakaan","library"],["bahasa","language"],["matematik","mathematics"],["sains","science"],
+    ["sejarah","history"],["kantin","canteen"],["jadual waktu","timetable"],["cikgu","teacher (informal)"],
+    ["geografi","geography"],["seni","art"],["pendidikan jasmani","physical education"],["sains komputer","computer science"],
+    ["markah","marks / score"],["lulus","to pass"],["gagal","to fail"],["belajar","to study"],
+    ["mengajar","to teach"],["soalan","question"],["jawapan","answer"],["kertas peperiksaan","exam paper"],
+    ["sijil","certificate"],["pengetua","principal"],["rakan sekelas","classmate"],["padang sekolah","school field"]
+  ],
+  "Daily Routine & Time": [
+    ["bangun","wake up"],["tidur","sleep"],["mandi","bathe"],["sarapan","breakfast"],
+    ["makan tengah hari","lunch"],["makan malam","dinner"],["pukul","o'clock"],["pagi","morning"],
+    ["tengah hari","noon"],["petang","afternoon / evening"],["malam","night"],["setiap hari","every day"],
+    ["minggu","week"],["bulan","month"],["tahun","year"],["esok","tomorrow"],
+    ["semalam","yesterday"],["sekarang","now"],["nanti","later"],["kemudian","then / afterwards"],
+    ["selalu","always"],["kadang-kadang","sometimes"],["jarang","rarely"],["tidak pernah","never"],
+    ["menggosok gigi","to brush teeth"],["menukar pakaian","to change clothes"],["berehat","to rest"],
+    ["pulang","to go home"],["bekerja","to work"],["berjalan kaki","to walk"]
+  ],
+  "Food & Drink": [
+    ["nasi","rice"],["mi","noodles"],["ayam","chicken"],["ikan","fish"],
+    ["sayur","vegetable"],["buah","fruit"],["air","water"],["teh","tea"],
+    ["kopi","coffee"],["gula","sugar"],["garam","salt"],["sedap","delicious"],
+    ["lapar","hungry"],["dahaga","thirsty"],["restoran","restaurant"],["sudu","spoon"],
+    ["daging","meat"],["telur","egg"],["roti","bread"],["susu","milk"],
+    ["ais","ice"],["pedas","spicy"],["masam","sour"],["tawar","bland"],
+    ["manis","sweet"],["garpu","fork"],["pinggan","plate"],["cawan","cup"],
+    ["gelas","glass"],["menu","menu"],["bil","bill"],["kenyang","full (satisfied)"]
+  ],
+  "Hobbies & Leisure": [
+    ["membaca","reading"],["menonton","watching"],["bermain","playing"],["berenang","swimming"],
+    ["melukis","drawing"],["memasak","cooking"],["menyanyi","singing"],["menari","dancing"],
+    ["berbasikal","cycling"],["bersukan","doing sports"],["filem","movie"],["muzik","music"],
+    ["permainan","game"],["percutian","holiday"],["gambar","picture / photo"],["telefon pintar","smartphone"],
+    ["mengumpul","to collect"],["menjahit","to sew"],["berkelah","to picnic"],["mendaki gunung","hiking / mountain climbing"],
+    ["memancing","fishing"],["fotografi","photography"],["membaca komik","reading comics"],["bermain permainan video","playing video games"],
+    ["melancong","to travel (leisure)"],["minat","interest / hobby"],["masa lapang","free time"],
+    ["menghibur diri","to entertain oneself"],["gitar","guitar"],["piano","piano"]
+  ],
+  "Health & Body": [
+    ["sakit","sick / pain"],["doktor","doctor"],["hospital","hospital"],["ubat","medicine"],
+    ["kepala","head"],["tangan","hand"],["kaki","leg / foot"],["mata","eye"],
+    ["telinga","ear"],["demam","fever"],["batuk","cough"],["selesema","flu / cold"],
+    ["sihat","healthy"],["gigi","tooth"],["perut","stomach"],["klinik","clinic"],
+    ["hidung","nose"],["mulut","mouth"],["jari","finger"],["lengan","arm"],
+    ["belakang","back"],["dada","chest"],["jantung","heart"],["darah","blood"],
+    ["luka","wound / injury"],["patah","broken (bone)"],["suntikan","injection"],["farmasi","pharmacy"],
+    ["pesakit","patient"],["jururawat","nurse"],["senaman","exercise"]
+  ],
+  "Shopping & Money": [
+    ["kedai","shop"],["pasar","market"],["harga","price"],["murah","cheap"],
+    ["mahal","expensive"],["duit","money"],["beli","buy"],["jual","sell"],
+    ["baju","shirt / clothes"],["seluar","trousers"],["kasut","shoes"],["saiz","size"],
+    ["diskaun","discount"],["resit","receipt"],["pusat membeli-belah","shopping mall"],["wang tunai","cash"],
+    ["kad kredit","credit card"],["tukar","to exchange"],["bayar","to pay"],["tawar-menawar","to bargain"],
+    ["pelanggan","customer"],["penjual","seller"],["troli","trolley"],["beg","bag"],
+    ["pasar raya","supermarket"],["kaunter","counter"],["tunggu giliran","to wait in line"],
+    ["stok habis","out of stock"],["percuma","free of charge"],["promosi","promotion"]
+  ],
+  "Travel & Transport": [
+    ["kereta","car"],["bas","bus"],["kapal terbang","airplane"],["kereta api","train"],
+    ["basikal","bicycle"],["teksi","taxi"],["lapangan terbang","airport"],["stesen","station"],
+    ["tiket","ticket"],["peta","map"],["pemandu","driver"],["jalan","road"],
+    ["perjalanan","journey / trip"],["bagasi","luggage"],["pasport","passport"],["lambat","late"],
+    ["kapal","ship"],["motosikal","motorcycle"],["lorong","lane / alley"],["lebuh raya","highway"],
+    ["had laju","speed limit"],["tempat duduk","seat"],["tempat letak kereta","parking"],["visa","visa"],
+    ["tempahan","reservation / booking"],["awal","early"],["sampai","to arrive"],["bertolak","to depart"],
+    ["sesak","congested / crowded"],["selamat sampai","safe arrival"]
+  ],
+  "Weather & Environment": [
+    ["panas","hot"],["sejuk","cold"],["hujan","rain"],["cerah","sunny / clear"],
+    ["angin","wind"],["awan","cloud"],["banjir","flood"],["pokok","tree"],
+    ["bunga","flower"],["sungai","river"],["laut","sea"],["gunung","mountain"],
+    ["hutan","forest"],["alam sekitar","environment"],["pencemaran","pollution"],["kitar semula","recycle"],
+    ["ribut","storm"],["petir","lightning"],["kemarau","drought"],["lembap","humid"],
+    ["suhu","temperature"],["musim","season"],["musim tengkujuh","monsoon season"],["bukit","hill"],
+    ["pulau","island"],["pantai","beach"],["tasik","lake"],["haiwan","animal"],
+    ["tumbuhan","plant"],["sisa","waste"],["udara","air"],["sampah","rubbish / trash"]
+  ],
+  "House & Home": [
+    ["rumah","house"],["bilik tidur","bedroom"],["dapur","kitchen"],["bilik air","bathroom"],
+    ["ruang tamu","living room"],["tingkap","window"],["pintu","door"],["meja","table"],
+    ["kerusi","chair"],["katil","bed"],["cermin","mirror"],["halaman","yard / garden"],
+    ["bumbung","roof"],["dinding","wall"],["alamat","address"],["kunci","key"],
+    ["lantai","floor"],["tangga","stairs"],["garaj","garage"],["almari","cupboard / wardrobe"],
+    ["peti sejuk","refrigerator"],["mesin basuh","washing machine"],["televisyen","television"],["kipas","fan"],
+    ["penghawa dingin","air conditioner"],["lampu","lamp / light"],["perabot","furniture"],["sewa","rent"],
+    ["pindah rumah","to move house"],["tetangga","neighbour (nearby)"]
+  ],
+  "Numbers & Colours": [
+    ["satu","one"],["dua","two"],["tiga","three"],["empat","four"],
+    ["lima","five"],["merah","red"],["biru","blue"],["kuning","yellow"],
+    ["hijau","green"],["hitam","black"],["putih","white"],["warna","colour"],
+    ["sepuluh","ten"],["seratus","hundred"],["nombor","number"],["ungu","purple"],
+    ["enam","six"],["tujuh","seven"],["lapan","eight"],["sembilan","nine"],
+    ["seribu","thousand"],["kelabu","grey"],["coklat","brown"],["merah jambu","pink"],
+    ["jingga","orange (colour)"],["pertama","first"],["kedua","second"],["separuh","half"]
+  ],
+  "Jobs & Occupations": [
+    ["peguam","lawyer"],["polis","police officer"],["peniaga","businessperson"],["petani","farmer"],
+    ["nelayan","fisherman"],["askar","soldier"],["jurutera","engineer"],["arkitek","architect"],
+    ["pekerja","worker"],["majikan","employer"],["gaji","salary"],["pejabat","office"],
+    ["kerjaya","career"],["pengarah","director"],["suri rumah","housewife"],["setiausaha","secretary"],
+    ["akauntan","accountant"],["pemandu teksi","taxi driver"],["tukang masak","cook / chef"],["pelayan","waiter / waitress"],
+    ["pengurus","manager"],["pekerja kilang","factory worker"],["ahli perniagaan","businessman / businesswoman"],["wartawan","journalist"],
+    ["pensyarah","lecturer"],["saintis","scientist"],["pelukis","painter / artist"],["pemuzik","musician"],
+    ["penulis","writer"],["pekerjaan","occupation / job"]
+  ],
+  "Clothing": [
+    ["baju kurung","traditional Malay dress"],["baju melayu","traditional Malay male attire"],["kemeja","shirt"],
+    ["seluar pendek","shorts"],["gaun","dress"],["topi","hat"],["selendang","shawl / scarf"],
+    ["sarung tangan","gloves"],["stokin","socks"],["tali pinggang","belt"],["jaket","jacket"],
+    ["baju sejuk","sweater"],["songkok","traditional cap"],["tudung","headscarf"],["pakaian seragam","uniform"],["fesyen","fashion"],
+    ["kain sarung","sarong"],["but","boots"],["pakaian dalam","underwear"],["sut","suit"],
+    ["blaus","blouse"],["kemeja-T","T-shirt"],["seluar jeans","jeans"],["kot","coat"],
+    ["payung","umbrella"],["cincin","ring"],["jam tangan","wristwatch"],["beg tangan","handbag"]
+  ],
+  "Emotions & Personality": [
+    ["gembira","happy"],["sedih","sad"],["marah","angry"],["takut","afraid"],
+    ["risau","worried"],["bosan","bored"],["letih","tired"],["teruja","excited"],
+    ["kecewa","disappointed"],["malu","shy / embarrassed"],["yakin","confident"],["ramah","friendly"],
+    ["peramah","sociable"],["pemalas","lazy"],["rajin","hardworking / diligent"],["baik hati","kind-hearted"],
+    ["sombong","arrogant"],["jujur","honest"],["pemarah","short-tempered"],["sabar","patient"],
+    ["lucu","funny"],["pandai","clever"],["bodoh","stupid"],["kacak","handsome"],
+    ["cantik","beautiful"],["comel","cute"]
+  ],
+  "Communication & Technology": [
+    ["telefon","telephone"],["mesej","message"],["e-mel","email"],["internet","internet"],
+    ["komputer riba","laptop"],["media sosial","social media"],["laman web","website"],["aplikasi","application / app"],
+    ["hantar","to send"],["terima","to receive"],["panggil","to call"],["membalas","to reply"],
+    ["kata laluan","password"],["skrin","screen"],["cas bateri","to charge (battery)"],["video panggilan","video call"],
+    ["akaun","account"],["muat turun","to download"],["muat naik","to upload"],["gambar profil","profile picture"],
+    ["ikut","to follow (online)"],["suka","to like"],["kongsi","to share"],["sambungan","connection"]
+  ],
+  "Sports": [
+    ["bola sepak","football"],["badminton","badminton"],["tenis meja","table tennis"],["tenis","tennis"],
+    ["hoki","hockey"],["sukan air","water sports"],["larian","running"],["bola jaring","netball"],
+    ["bola keranjang","basketball"],["pasukan","team"],["jurulatih","coach"],["pemain","player"],
+    ["padang","field"],["gelanggang","court"],["kejohanan","championship"],["menang","to win"],
+    ["kalah","to lose"],["seri","draw / tie"],["piala","trophy"],["rekod","record"],
+    ["latihan","training"],["stadium","stadium"],["sukan olahraga","athletics"],["sukan berpasukan","team sports"]
+  ],
+  "Places & Directions": [
+    ["bandar","town / city"],["kampung","village"],["bangunan","building"],["jalan raya","main road"],
+    ["simpang","junction"],["lampu isyarat","traffic light"],["kiri","left"],["kanan","right"],
+    ["lurus","straight"],["belok","to turn"],["utara","north"],["selatan","south"],
+    ["timur","east"],["barat","west"],["berhampiran","nearby"],["jauh","far"],
+    ["dekat","near"],["di antara","between"],["di sebelah","beside"],["masjid","mosque"],
+    ["kuil","temple"],["gereja","church"],["muzium","museum"],["taman","park"]
+  ]
+};
+
+const CHINESE_TOPICS = {
+  "Greetings & Introductions": [
+    ["你好","nǐ hǎo","hello"],["早上好","zǎoshang hǎo","good morning"],["晚上好","wǎnshang hǎo","good evening"],
+    ["再见","zàijiàn","goodbye"],["谢谢","xièxie","thank you"],["不客气","bú kèqi","you're welcome"],
+    ["对不起","duìbuqǐ","sorry"],["请","qǐng","please"],["我叫","wǒ jiào","my name is"],
+    ["你叫什么名字","nǐ jiào shénme míngzi","what is your name"],["很高兴认识你","hěn gāoxìng rènshi nǐ","nice to meet you"],
+    ["朋友","péngyou","friend"],["先生","xiānsheng","Mr / sir"],["女士","nǚshì","madam"],
+    ["是","shì","yes / to be"],["不是","bú shì","no / is not"],["多大","duō dà","how old"],["岁","suì","years old"],
+    ["欢迎","huānyíng","welcome"],["你好吗","nǐ hǎo ma","how are you"],["我很好","wǒ hěn hǎo","I'm fine"],
+    ["你呢","nǐ ne","and you?"],["没关系","méi guānxi","it's okay / never mind"],["不用谢","búyòng xiè","no need to thank"],
+    ["晚安","wǎn'ān","good night"],["姓","xìng","surname"],["哪里人","nǎlǐ rén","where are you from (person)"],
+    ["请问","qǐngwèn","excuse me (asking)"],["打扰一下","dǎrǎo yíxià","excuse me (interrupting)"],
+    ["保持联系","bǎochí liánxì","keep in touch"],["欢迎光临","huānyíng guānglín","welcome (to a shop)"]
+  ],
+  "Family": [
+    ["妈妈","māma","mother"],["爸爸","bàba","father"],["哥哥","gēge","older brother"],["姐姐","jiějie","older sister"],
+    ["弟弟","dìdi","younger brother"],["妹妹","mèimei","younger sister"],["爷爷","yéye","paternal grandfather"],
+    ["奶奶","nǎinai","paternal grandmother"],["孩子","háizi","child"],["丈夫","zhàngfu","husband"],
+    ["妻子","qīzi","wife"],["表哥","biǎogē","cousin (older male)"],["叔叔","shūshu","uncle"],["阿姨","āyí","aunty"],
+    ["家庭","jiātíng","family"],["儿子","érzi","son"],["女儿","nǚ'ér","daughter"],
+    ["外公","wàigōng","maternal grandfather"],["外婆","wàipó","maternal grandmother"],
+    ["姐夫","jiěfu","brother-in-law (older sister's husband)"],["嫂子","sǎozi","sister-in-law (older brother's wife)"],
+    ["公婆","gōngpó","parents-in-law"],["女婿","nǚxu","son-in-law"],["儿媳","érxí","daughter-in-law"],
+    ["孙子","sūnzi","grandson"],["孤儿","gū'ér","orphan"],["单身","dānshēn","single"],
+    ["已婚","yǐhūn","married"],["离婚","líhūn","divorced"],["寡妇","guǎfù","widow"],
+    ["兄弟姐妹","xiōngdì jiěmèi","siblings"],["大家庭","dàjiātíng","extended family"]
+  ],
+  "School": [
+    ["学校","xuéxiào","school"],["老师","lǎoshī","teacher"],["学生","xuésheng","student"],["教室","jiàoshì","classroom"],
+    ["书","shū","book"],["铅笔","qiānbǐ","pencil"],["考试","kǎoshì","exam"],["作业","zuòyè","homework"],
+    ["图书馆","túshūguǎn","library"],["汉语","hànyǔ","Chinese language"],["数学","shùxué","mathematics"],
+    ["科学","kēxué","science"],["历史","lìshǐ","history"],["食堂","shítáng","canteen"],["课程表","kèchéngbiǎo","timetable"],
+    ["及格","jígé","to pass (an exam)"],["成绩","chéngjì","grades / results"],
+    ["地理","dìlǐ","geography"],["美术","měishù","art"],["体育","tǐyù","physical education"],
+    ["计算机科学","jìsuànjī kēxué","computer science"],["分数","fēnshù","marks / score"],["不及格","bù jígé","to fail"],
+    ["学习","xuéxí","to study"],["教","jiāo","to teach"],["问题","wèntí","question"],["答案","dá'àn","answer"],
+    ["试卷","shìjuàn","exam paper"],["证书","zhèngshū","certificate"],["校长","xiàozhǎng","principal"],
+    ["同学","tóngxué","classmate"],["操场","cāochǎng","school field"]
+  ],
+  "Daily Routine & Time": [
+    ["起床","qǐchuáng","get up"],["睡觉","shuìjiào","sleep"],["洗澡","xǐzǎo","shower / bathe"],["早饭","zǎofàn","breakfast"],
+    ["午饭","wǔfàn","lunch"],["晚饭","wǎnfàn","dinner"],["点","diǎn","o'clock"],["早上","zǎoshang","morning"],
+    ["中午","zhōngwǔ","noon"],["下午","xiàwǔ","afternoon"],["晚上","wǎnshang","evening / night"],["每天","měitiān","every day"],
+    ["星期","xīngqī","week"],["月","yuè","month"],["年","nián","year"],["明天","míngtiān","tomorrow"],
+    ["昨天","zuótiān","yesterday"],["现在","xiànzài","now"],
+    ["昨晚","zuówǎn","last night"],["今天","jīntiān","today"],["后天","hòutiān","the day after tomorrow"],
+    ["前天","qiántiān","the day before yesterday"],["总是","zǒngshì","always"],["有时候","yǒushíhou","sometimes"],
+    ["很少","hěnshǎo","rarely"],["从不","cóngbù","never"],["刷牙","shuāyá","to brush teeth"],
+    ["换衣服","huàn yīfu","to change clothes"],["休息","xiūxi","to rest"],["回家","huíjiā","to go home"],
+    ["工作","gōngzuò","to work"],["走路","zǒulù","to walk"]
+  ],
+  "Food & Drink": [
+    ["米饭","mǐfàn","rice"],["面条","miàntiáo","noodles"],["鸡肉","jīròu","chicken"],["鱼","yú","fish"],
+    ["蔬菜","shūcài","vegetable"],["水果","shuǐguǒ","fruit"],["水","shuǐ","water"],["茶","chá","tea"],
+    ["咖啡","kāfēi","coffee"],["糖","táng","sugar"],["盐","yán","salt"],["好吃","hǎochī","delicious"],
+    ["饿","è","hungry"],["渴","kě","thirsty"],["餐厅","cāntīng","restaurant"],["筷子","kuàizi","chopsticks"],
+    ["肉","ròu","meat"],["鸡蛋","jīdàn","egg"],["面包","miànbāo","bread"],["牛奶","niúnǎi","milk"],
+    ["冰","bīng","ice"],["辣","là","spicy"],["酸","suān","sour"],["淡","dàn","bland"],
+    ["甜","tián","sweet"],["叉子","chāzi","fork"],["盘子","pánzi","plate"],["杯子","bēizi","cup"],
+    ["玻璃杯","bōlibēi","glass"],["菜单","càidān","menu"],["账单","zhàngdān","bill"],["饱","bǎo","full (satisfied)"]
+  ],
+  "Hobbies & Leisure": [
+    ["看书","kànshū","reading"],["看电视","kàn diànshì","watching TV"],["玩","wán","to play"],["游泳","yóuyǒng","swimming"],
+    ["画画","huàhuà","drawing"],["做饭","zuòfàn","cooking"],["唱歌","chànggē","singing"],["跳舞","tiàowǔ","dancing"],
+    ["骑自行车","qí zìxíngchē","cycling"],["运动","yùndòng","sports / exercise"],["电影","diànyǐng","movie"],
+    ["音乐","yīnyuè","music"],["游戏","yóuxì","game"],["假期","jiàqī","holiday"],["照片","zhàopiàn","photo"],["手机","shǒujī","smartphone"],
+    ["收集","shōují","to collect"],["缝纫","féngrèn","to sew"],["野餐","yěcān","to picnic"],
+    ["爬山","páshān","hiking / mountain climbing"],["钓鱼","diàoyú","fishing"],["摄影","shèyǐng","photography"],
+    ["看漫画","kàn mànhuà","reading comics"],["玩电子游戏","wán diànzǐ yóuxì","playing video games"],
+    ["旅游","lǚyóu","to travel (leisure)"],["爱好","àihào","hobby / interest"],["空闲时间","kòngxián shíjiān","free time"],
+    ["娱乐","yúlè","entertainment"],["吉他","jítā","guitar"],["钢琴","gāngqín","piano"]
+  ],
+  "Health & Body": [
+    ["生病","shēngbìng","to be sick"],["医生","yīshēng","doctor"],["医院","yīyuàn","hospital"],["药","yào","medicine"],
+    ["头","tóu","head"],["手","shǒu","hand"],["脚","jiǎo","foot / leg"],["眼睛","yǎnjing","eyes"],
+    ["耳朵","ěrduo","ears"],["发烧","fāshāo","fever"],["咳嗽","késou","cough"],["感冒","gǎnmào","flu / cold"],
+    ["健康","jiànkāng","healthy"],["牙齿","yáchǐ","teeth"],["肚子","dùzi","stomach"],["诊所","zhěnsuǒ","clinic"],
+    ["鼻子","bízi","nose"],["嘴","zuǐ","mouth"],["手指","shǒuzhǐ","finger"],["手臂","shǒubì","arm"],
+    ["背","bèi","back"],["胸","xiōng","chest"],["心脏","xīnzàng","heart"],["血","xuè","blood"],
+    ["伤口","shāngkǒu","wound / injury"],["骨折","gǔzhé","broken bone"],["打针","dǎzhēn","injection"],
+    ["药房","yàofáng","pharmacy"],["病人","bìngrén","patient"],["锻炼","duànliàn","exercise"]
+  ],
+  "Shopping & Money": [
+    ["商店","shāngdiàn","shop"],["市场","shìchǎng","market"],["价钱","jiàqián","price"],["便宜","piányi","cheap"],
+    ["贵","guì","expensive"],["钱","qián","money"],["买","mǎi","buy"],["卖","mài","sell"],
+    ["衣服","yīfu","clothes"],["裤子","kùzi","trousers"],["鞋子","xiézi","shoes"],["尺码","chǐmǎ","size"],
+    ["打折","dǎzhé","discount"],["收据","shōujù","receipt"],["购物中心","gòuwù zhōngxīn","shopping mall"],["现金","xiànjīn","cash"],
+    ["信用卡","xìnyòngkǎ","credit card"],["换","huàn","to exchange"],["付钱","fùqián","to pay"],
+    ["讨价还价","tǎojià huánjià","to bargain"],["顾客","gùkè","customer"],["卖家","màijiā","seller"],
+    ["购物车","gòuwùchē","trolley"],["包","bāo","bag"],["超市","chāoshì","supermarket"],["柜台","guìtái","counter"],
+    ["排队","páiduì","to wait in line"],["缺货","quēhuò","out of stock"],["免费","miǎnfèi","free (of charge)"],["促销","cùxiāo","promotion"]
+  ],
+  "Travel & Transport": [
+    ["汽车","qìchē","car"],["公共汽车","gōnggòng qìchē","bus"],["飞机","fēijī","airplane"],["火车","huǒchē","train"],
+    ["自行车","zìxíngchē","bicycle"],["出租车","chūzūchē","taxi"],["机场","jīchǎng","airport"],["车站","chēzhàn","station"],
+    ["票","piào","ticket"],["地图","dìtú","map"],["司机","sījī","driver"],["路","lù","road"],
+    ["旅行","lǚxíng","trip / travel"],["行李","xíngli","luggage"],["护照","hùzhào","passport"],["晚","wǎn","late"],
+    ["船","chuán","ship"],["摩托车","mótuōchē","motorcycle"],["小巷","xiǎoxiàng","lane / alley"],
+    ["高速公路","gāosù gōnglù","highway"],["限速","xiànsù","speed limit"],["座位","zuòwèi","seat"],
+    ["停车场","tíngchēchǎng","parking lot"],["签证","qiānzhèng","visa"],["预订","yùdìng","reservation / booking"],
+    ["早","zǎo","early"],["到达","dàodá","to arrive"],["出发","chūfā","to depart"],["拥挤","yōngjǐ","congested / crowded"],
+    ["一路平安","yílù píng'ān","safe journey"]
+  ],
+  "Weather & Environment": [
+    ["热","rè","hot"],["冷","lěng","cold"],["下雨","xiàyǔ","rain"],["晴天","qíngtiān","sunny"],
+    ["风","fēng","wind"],["云","yún","cloud"],["洪水","hóngshuǐ","flood"],["树","shù","tree"],
+    ["花","huā","flower"],["河","hé","river"],["海","hǎi","sea"],["山","shān","mountain"],
+    ["森林","sēnlín","forest"],["环境","huánjìng","environment"],["污染","wūrǎn","pollution"],["回收","huíshōu","recycle"],
+    ["暴风雨","bàofēngyǔ","storm"],["闪电","shǎndiàn","lightning"],["干旱","gānhàn","drought"],
+    ["潮湿","cháoshī","humid"],["温度","wēndù","temperature"],["季节","jìjié","season"],
+    ["台风季","táifēng jì","typhoon season"],["小山","xiǎoshān","hill"],["岛","dǎo","island"],
+    ["海滩","hǎitān","beach"],["湖","hú","lake"],["动物","dòngwù","animal"],["植物","zhíwù","plant"],
+    ["垃圾","lājī","waste / rubbish"],["空气","kōngqì","air"],["太阳","tàiyáng","sun"]
+  ],
+  "House & Home": [
+    ["房子","fángzi","house"],["卧室","wòshì","bedroom"],["厨房","chúfáng","kitchen"],["浴室","yùshì","bathroom"],
+    ["客厅","kètīng","living room"],["窗户","chuānghu","window"],["门","mén","door"],["桌子","zhuōzi","table"],
+    ["椅子","yǐzi","chair"],["床","chuáng","bed"],["镜子","jìngzi","mirror"],["花园","huāyuán","garden"],
+    ["屋顶","wūdǐng","roof"],["墙","qiáng","wall"],["地址","dìzhǐ","address"],["钥匙","yàoshi","key"],
+    ["地板","dìbǎn","floor"],["楼梯","lóutī","stairs"],["车库","chēkù","garage"],["柜子","guìzi","cupboard / wardrobe"],
+    ["冰箱","bīngxiāng","refrigerator"],["洗衣机","xǐyījī","washing machine"],["电视","diànshì","television"],
+    ["风扇","fēngshàn","fan"],["空调","kōngtiáo","air conditioner"],["灯","dēng","lamp / light"],
+    ["家具","jiājù","furniture"],["租金","zūjīn","rent"],["搬家","bānjiā","to move house"],["邻居","línjū","neighbour"]
+  ],
+  "Numbers & Colours": [
+    ["一","yī","one"],["二","èr","two"],["三","sān","three"],["四","sì","four"],
+    ["五","wǔ","five"],["红色","hóngsè","red"],["蓝色","lánsè","blue"],["黄色","huángsè","yellow"],
+    ["绿色","lǜsè","green"],["黑色","hēisè","black"],["白色","báisè","white"],["颜色","yánsè","colour"],
+    ["十","shí","ten"],["一百","yìbǎi","hundred"],["数字","shùzì","number"],["紫色","zǐsè","purple"],
+    ["六","liù","six"],["七","qī","seven"],["八","bā","eight"],["九","jiǔ","nine"],
+    ["一千","yìqiān","thousand"],["灰色","huīsè","grey"],["棕色","zōngsè","brown"],["粉红色","fěnhóngsè","pink"],
+    ["橙色","chéngsè","orange (colour)"],["第一","dì-yī","first"],["第二","dì-èr","second"],["一半","yíbàn","half"]
+  ],
+  "Jobs & Occupations": [
+    ["律师","lǜshī","lawyer"],["警察","jǐngchá","police officer"],["商人","shāngrén","businessperson"],["农民","nóngmín","farmer"],
+    ["渔民","yúmín","fisherman"],["军人","jūnrén","soldier"],["工程师","gōngchéngshī","engineer"],["建筑师","jiànzhùshī","architect"],
+    ["工人","gōngrén","worker"],["老板","lǎobǎn","boss / employer"],["工资","gōngzī","salary"],["办公室","bàngōngshì","office"],
+    ["职业","zhíyè","career / occupation"],["主任","zhǔrèn","director"],["家庭主妇","jiātíng zhǔfù","housewife"],["护士","hùshi","nurse"],
+    ["秘书","mìshū","secretary"],["会计","kuàijì","accountant"],["出租车司机","chūzūchē sījī","taxi driver"],
+    ["厨师","chúshī","cook / chef"],["服务员","fúwùyuán","waiter / waitress"],["经理","jīnglǐ","manager"],
+    ["工厂工人","gōngchǎng gōngrén","factory worker"],["记者","jìzhě","journalist"],["讲师","jiǎngshī","lecturer"],
+    ["科学家","kēxuéjiā","scientist"],["画家","huàjiā","painter / artist"],["音乐家","yīnyuèjiā","musician"],
+    ["作家","zuòjiā","writer"],["实习生","shíxíshēng","intern"]
+  ],
+  "Clothing": [
+    ["衬衫","chènshān","shirt"],["短裤","duǎnkù","shorts"],["裙子","qúnzi","skirt / dress"],["帽子","màozi","hat"],
+    ["围巾","wéijīn","scarf"],["手套","shǒutào","gloves"],["袜子","wàzi","socks"],["皮带","pídài","belt"],
+    ["夹克","jiákè","jacket"],["毛衣","máoyī","sweater"],["校服","xiàofú","school uniform"],["时尚","shíshàng","fashion"],
+    ["外套","wàitào","coat"],["牛仔裤","niúzǎikù","jeans"],["雨伞","yǔsǎn","umbrella"],["手表","shǒubiǎo","wristwatch"],
+    ["靴子","xuēzi","boots"],["内衣","nèiyī","underwear"],["西装","xīzhuāng","suit"],["上衣","shàngyī","top / blouse"],
+    ["T恤","T-xù","T-shirt"],["戒指","jièzhi","ring"],["手提包","shǒutíbāo","handbag"],["连衣裙","liányīqún","dress"],
+    ["睡衣","shuìyī","pyjamas"],["拖鞋","tuōxié","slippers"],["围裙","wéiqún","apron"],["手镯","shǒuzhuó","bracelet"]
+  ],
+  "Emotions & Personality": [
+    ["高兴","gāoxìng","happy"],["伤心","shāngxīn","sad"],["生气","shēngqì","angry"],["害怕","hàipà","afraid"],
+    ["担心","dānxīn","worried"],["无聊","wúliáo","bored"],["累","lèi","tired"],["兴奋","xīngfèn","excited"],
+    ["失望","shīwàng","disappointed"],["害羞","hàixiū","shy"],["友好","yǒuhǎo","friendly"],["懒","lǎn","lazy"],
+    ["勤奋","qínfèn","hardworking"],["诚实","chéngshí","honest"],["耐心","nàixīn","patient"],["聪明","cōngmíng","clever"],
+    ["漂亮","piàoliang","beautiful"],["可爱","kě'ài","cute"],
+    ["满意","mǎnyì","satisfied"],["骄傲","jiāo'ào","proud"],["乐观","lèguān","optimistic"],["悲观","bēiguān","pessimistic"],
+    ["勇敢","yǒnggǎn","brave"],["胆小","dǎnxiǎo","timid / cowardly"],["自信","zìxìn","confident"],
+    ["粗鲁","cūlǔ","rude"],["礼貌","lǐmào","polite"],["好奇","hàoqí","curious"]
+  ],
+  "Communication & Technology": [
+    ["电话","diànhuà","telephone"],["短信","duǎnxìn","text message"],["电子邮件","diànzǐ yóujiàn","email"],["网络","wǎngluò","internet"],
+    ["电脑","diànnǎo","computer"],["社交媒体","shèjiāo méitǐ","social media"],["网站","wǎngzhàn","website"],
+    ["应用程序","yìngyòng chéngxù","application (app)"],["发送","fāsòng","to send"],["收到","shōudào","to receive"],
+    ["打电话","dǎ diànhuà","to make a call"],["回复","huífù","to reply"],["密码","mìmǎ","password"],["屏幕","píngmù","screen"],
+    ["充电","chōngdiàn","to charge (battery)"],["账号","zhànghào","account"],
+    ["笔记本电脑","bǐjìběn diànnǎo","laptop"],["下载","xiàzài","to download"],["上传","shàngchuán","to upload"],
+    ["头像","tóuxiàng","profile picture"],["关注","guānzhù","to follow (online)"],["喜欢","xǐhuan","to like"],
+    ["分享","fēnxiǎng","to share"],["连接","liánjiē","connection"],["视频通话","shìpín tōnghuà","video call"],
+    ["平板电脑","píngbǎn diànnǎo","tablet"],["无线网络","wúxiàn wǎngluò","wifi"],["二维码","èrwéimǎ","QR code"]
+  ],
+  "Sports": [
+    ["足球","zúqiú","football"],["羽毛球","yǔmáoqiú","badminton"],["乒乓球","pīngpāngqiú","table tennis"],["网球","wǎngqiú","tennis"],
+    ["篮球","lánqiú","basketball"],["跑步","pǎobù","running"],["球队","qiúduì","team"],["教练","jiàoliàn","coach"],
+    ["球员","qiúyuán","player"],["球场","qiúchǎng","court / field"],["冠军","guànjūn","champion"],["赢","yíng","to win"],
+    ["输","shū","to lose"],["奖杯","jiǎngbēi","trophy"],["训练","xùnliàn","training"],["体育馆","tǐyùguǎn","stadium / gym"],
+    ["曲棍球","qūgùnqiú","hockey"],["排球","páiqiú","volleyball"],["田径","tiánjìng","athletics"],
+    ["团队运动","tuánduì yùndòng","team sports"],["平局","píngjú","draw / tie"],["纪录","jìlù","record"],
+    ["锦标赛","jǐnbiāosài","championship"],["运动员","yùndòngyuán","athlete"],["裁判","cáipàn","referee"],
+    ["比赛","bǐsài","match / competition"],["体操","tǐcāo","gymnastics"],["高尔夫球","gāo'ěrfū qiú","golf"]
+  ],
+  "Places & Directions": [
+    ["城市","chéngshì","city"],["村庄","cūnzhuāng","village"],["建筑物","jiànzhùwù","building"],["左边","zuǒbian","left"],
+    ["右边","yòubian","right"],["直走","zhízǒu","go straight"],["转弯","zhuǎnwān","to turn"],["北","běi","north"],
+    ["南","nán","south"],["东","dōng","east"],["西","xī","west"],["附近","fùjìn","nearby"],
+    ["远","yuǎn","far"],["近","jìn","near"],["之间","zhījiān","between"],["公园","gōngyuán","park"],["博物馆","bówùguǎn","museum"],
+    ["清真寺","qīngzhēnsì","mosque"],["庙宇","miàoyǔ","temple"],["教堂","jiàotáng","church"],
+    ["十字路口","shízì lùkǒu","intersection / junction"],["红绿灯","hónglǜdēng","traffic light"],["街道","jiēdào","street"],
+    ["广场","guǎngchǎng","square / plaza"],["中心","zhōngxīn","center"],["郊区","jiāoqū","suburb"],
+    ["首都","shǒudū","capital city"],["地方","dìfang","place"]
+  ]
+};
+
+const KOREAN_TOPICS = {
+  "Greetings & Introductions": [
+    ["안녕하세요","annyeonghaseyo","hello"],["안녕히 가세요","annyeonghi gaseyo","goodbye (to person leaving)"],
+    ["안녕히 계세요","annyeonghi gyeseyo","goodbye (to person staying)"],["감사합니다","gamsahamnida","thank you"],
+    ["천만에요","cheonmaneyo","you're welcome"],["죄송합니다","joesonghamnida","sorry"],["제발","jebal","please"],
+    ["제 이름은","je ireumeun","my name is"],["이름이 뭐예요","ireumi mwoyeyo","what is your name"],
+    ["만나서 반갑습니다","mannaseo bangapseumnida","nice to meet you"],["친구","chingu","friend"],
+    ["선생님","seonsaengnim","teacher / respectful title"],["네","ne","yes"],["아니요","aniyo","no"],
+    ["몇 살이에요","myeot sarieyo","how old are you"],["살","sal","years old (age)"],
+    ["환영합니다","hwanyeonghamnida","welcome"],["어떻게 지내세요","eotteoke jinaeseyo","how are you"],
+    ["저는 잘 지내요","jeoneun jal jinaeyo","I'm fine"],["당신은요","dangsineunyo","and you?"],
+    ["괜찮아요","gwaenchanhayo","it's okay / never mind"],["안녕히 주무세요","annyeonghi jumuseyo","good night"],
+    ["성","seong","surname"],["어느 나라에서 왔어요","eoneu nara-eseo wasseoyo","where are you from"],
+    ["실례합니다","sillyehamnida","excuse me"],["연락하세요","yeollakhaseyo","keep in touch"],
+    ["어서 오세요","eoseo oseyo","welcome (shop greeting)"],["반갑습니다","bangapseumnida","glad to meet you"],
+    ["잘 가요","jal gayo","goodbye (casual, to person leaving)"],["또 만나요","tto mannayo","see you again"]
+  ],
+  "Family": [
+    ["어머니","eomeoni","mother"],["아버지","abeoji","father"],["형","hyeong","older brother (male speaker)"],
+    ["누나","nuna","older sister (male speaker)"],["오빠","oppa","older brother (female speaker)"],
+    ["언니","eonni","older sister (female speaker)"],["동생","dongsaeng","younger sibling"],
+    ["할아버지","harabeoji","grandfather"],["할머니","halmeoni","grandmother"],["아이","ai","child"],
+    ["남편","nampyeon","husband"],["아내","anae","wife"],["사촌","sachon","cousin"],["삼촌","samchon","uncle"],
+    ["이모","imo","aunt (mother's side)"],["가족","gajok","family"],["아들","adeul","son"],["딸","ttal","daughter"],
+    ["외할아버지","oe-harabeoji","maternal grandfather"],["외할머니","oe-halmeoni","maternal grandmother"],
+    ["매형","maehyeong","brother-in-law (older sister's husband)"],["올케","olke","sister-in-law (brother's wife)"],
+    ["사위","sawi","son-in-law"],["며느리","myeoneuri","daughter-in-law"],["손자","sonja","grandson"],
+    ["고아","goa","orphan"],["독신","doksin","single"],["기혼","gihon","married"],
+    ["이혼하다","ihonhada","to divorce"],["과부","gwabu","widow"]
+  ],
+  "School": [
+    ["학교","hakgyo","school"],["교사","gyosa","teacher"],["학생","haksaeng","student"],["교실","gyosil","classroom"],
+    ["책","chaek","book"],["연필","yeonpil","pencil"],["시험","siheom","exam"],["숙제","sukje","homework"],
+    ["도서관","doseogwan","library"],["한국어","hangugeo","Korean language"],["수학","suhak","mathematics"],
+    ["과학","gwahak","science"],["역사","yeoksa","history"],["식당","sikdang","canteen / cafeteria"],
+    ["시간표","siganpyo","timetable"],["성적","seongjeok","grades"],
+    ["지리","jiri","geography"],["미술","misul","art"],["체육","cheyuk","physical education"],
+    ["컴퓨터 과학","keompyuteo gwahak","computer science"],["점수","jeomsu","marks / score"],["낙제하다","nakjehada","to fail"],
+    ["공부하다","gongbuhada","to study"],["가르치다","gareuchida","to teach"],["질문","jilmun","question"],
+    ["대답","daedap","answer"],["시험지","siheomji","exam paper"],["자격증","jagyeokjeung","certificate"],
+    ["교장","gyojang","principal"],["반 친구","ban chingu","classmate"]
+  ],
+  "Daily Routine & Time": [
+    ["일어나다","ireonada","to wake up"],["자다","jada","to sleep"],["샤워하다","syawohada","to shower"],
+    ["아침식사","achim siksa","breakfast"],["점심식사","jeomsim siksa","lunch"],["저녁식사","jeonyeok siksa","dinner"],
+    ["시","si","o'clock"],["아침","achim","morning"],["점심","jeomsim","noon"],["오후","ohu","afternoon"],
+    ["저녁","jeonyeok","evening"],["밤","bam","night"],["매일","maeil","every day"],["주","ju","week"],
+    ["달","dal","month"],["년","nyeon","year"],["내일","naeil","tomorrow"],["어제","eoje","yesterday"],
+    ["어젯밤","eojetbam","last night"],["오늘","oneul","today"],["모레","more","the day after tomorrow"],
+    ["그저께","geujeokke","the day before yesterday"],["항상","hangsang","always"],["가끔","gakkeum","sometimes"],
+    ["거의 없다","geoui eopda","rarely"],["전혀 없다","jeonhyeo eopda","never"],["양치질하다","yangchijilhada","to brush teeth"],
+    ["옷을 갈아입다","oseul garaipda","to change clothes"],["쉬다","swida","to rest"],["집에 가다","jibe gada","to go home"]
+  ],
+  "Food & Drink": [
+    ["밥","bap","rice"],["국수","guksu","noodles"],["닭고기","dalgogi","chicken"],["생선","saengseon","fish"],
+    ["채소","chaeso","vegetable"],["과일","gwail","fruit"],["물","mul","water"],["차","cha","tea"],
+    ["커피","keopi","coffee"],["설탕","seoltang","sugar"],["소금","sogeum","salt"],["맛있다","masitda","delicious"],
+    ["배고프다","baegopeuda","hungry"],["목마르다","mongmareuda","thirsty"],["식당","sikdang","restaurant"],["젓가락","jeotgarak","chopsticks"],
+    ["고기","gogi","meat"],["계란","gyeran","egg"],["빵","ppang","bread"],["우유","uyu","milk"],
+    ["얼음","eoreum","ice"],["맵다","maepda","spicy"],["시다","sida","sour"],["싱겁다","singeopda","bland"],
+    ["달다","dalda","sweet"],["포크","pokeu","fork"],["접시","jeopsi","plate"],["컵","keop","cup"],
+    ["유리잔","yurijan","glass"],["메뉴","menyu","menu"],["계산서","gyesanseo","bill"],["배부르다","baebureuda","full (satisfied)"]
+  ],
+  "Hobbies & Leisure": [
+    ["독서","dokseo","reading"],["텔레비전 시청","tellebijeon sicheong","watching TV"],["놀다","nolda","to play"],
+    ["수영","suyeong","swimming"],["그림 그리기","geurim geurigi","drawing"],["요리하다","yorihada","cooking"],
+    ["노래하다","noraehada","singing"],["춤추다","chumchuda","dancing"],["자전거 타기","jajeongeo tagi","cycling"],
+    ["운동","undong","exercise / sports"],["영화","yeonghwa","movie"],["음악","eumak","music"],["게임","geim","game"],
+    ["휴가","hyuga","holiday"],["사진","sajin","photo"],["스마트폰","seumateupon","smartphone"],
+    ["수집하다","sujiphada","to collect"],["바느질하다","baneujilhada","to sew"],["소풍 가다","sopung gada","to go on a picnic"],
+    ["등산","deungsan","hiking / mountain climbing"],["낚시","nakksi","fishing"],["사진 촬영","sajin chwaryeong","photography"],
+    ["만화책 읽기","manhwachaek ilgi","reading comics"],["비디오 게임 하기","bidio geim hagi","playing video games"],
+    ["여행하다","yeohaenghada","to travel (leisure)"],["취미","chwimi","hobby / interest"],["자유 시간","jayu sigan","free time"],
+    ["오락","orak","entertainment"],["기타","gita","guitar"],["피아노","piano","piano"]
+  ],
+  "Health & Body": [
+    ["아프다","apeuda","sick / painful"],["의사","uisa","doctor"],["병원","byeongwon","hospital"],["약","yak","medicine"],
+    ["머리","meori","head"],["손","son","hand"],["다리","dari","leg"],["눈","nun","eyes"],
+    ["귀","gwi","ears"],["열","yeol","fever"],["기침","gichim","cough"],["감기","gamgi","cold / flu"],
+    ["건강하다","geonganghada","healthy"],["이","i","teeth"],["배","bae","stomach"],["진료소","jillyoso","clinic"],
+    ["코","ko","nose"],["입","ip","mouth"],["손가락","songarak","finger"],["팔","pal","arm"],
+    ["등","deung","back"],["가슴","gaseum","chest"],["심장","simjang","heart"],["피","pi","blood"],
+    ["상처","sangcheo","wound / injury"],["골절","goljeol","broken bone"],["주사","jusa","injection"],
+    ["약국","yakguk","pharmacy"],["환자","hwanja","patient"],["운동하다","undonghada","to exercise"]
+  ],
+  "Shopping & Money": [
+    ["가게","gage","shop"],["시장","sijang","market"],["가격","gagyeok","price"],["싸다","ssada","cheap"],
+    ["비싸다","bissada","expensive"],["돈","don","money"],["사다","sada","buy"],["팔다","palda","sell"],
+    ["옷","ot","clothes"],["바지","baji","trousers"],["신발","sinbal","shoes"],["사이즈","saijeu","size"],
+    ["할인","harin","discount"],["영수증","yeongsujeung","receipt"],["쇼핑몰","syopingmol","shopping mall"],["현금","hyeongeum","cash"],
+    ["신용카드","sinyongkadeu","credit card"],["교환하다","gyohwanhada","to exchange"],["지불하다","jibulhada","to pay"],
+    ["흥정하다","heungjeonghada","to bargain"],["고객","gogaek","customer"],["판매자","panmaeja","seller"],
+    ["쇼핑카트","syopingkateu","trolley"],["가방","gabang","bag"],["슈퍼마켓","syupeomaket","supermarket"],
+    ["계산대","gyesandae","counter"],["줄을 서다","jureul seoda","to wait in line"],["품절","pumjeol","out of stock"],
+    ["무료","muryo","free of charge"],["프로모션","peuromosyeon","promotion"]
+  ],
+  "Travel & Transport": [
+    ["자동차","jadongcha","car"],["버스","beoseu","bus"],["비행기","bihaenggi","airplane"],["기차","gicha","train"],
+    ["자전거","jajeongeo","bicycle"],["택시","taeksi","taxi"],["공항","gonghang","airport"],["역","yeok","station"],
+    ["표","pyo","ticket"],["지도","jido","map"],["운전사","unjeonsa","driver"],["길","gil","road"],
+    ["여행","yeohaeng","journey / trip"],["짐","jim","luggage"],["여권","yeogwon","passport"],["늦다","neutda","late"],
+    ["배","bae","ship"],["오토바이","otobai","motorcycle"],["골목","golmok","lane / alley"],
+    ["고속도로","gosokdoro","highway"],["제한 속도","jehan sokdo","speed limit"],["좌석","jwaseok","seat"],
+    ["주차장","juchajang","parking lot"],["비자","bija","visa"],["예약","yeyak","reservation / booking"],
+    ["이르다","ireuda","early"],["도착하다","dochakhada","to arrive"],["출발하다","chulbalhada","to depart"],
+    ["붐비다","bumbida","congested / crowded"],["안전한 여행 되세요","anjeonhan yeohaeng doeseyo","safe journey"]
+  ],
+  "Weather & Environment": [
+    ["덥다","deopda","hot"],["춥다","chupda","cold"],["비","bi","rain"],["맑다","makda","sunny / clear"],
+    ["바람","baram","wind"],["구름","gureum","cloud"],["홍수","hongsu","flood"],["나무","namu","tree"],
+    ["꽃","kkot","flower"],["강","gang","river"],["바다","bada","sea"],["산","san","mountain"],
+    ["숲","sup","forest"],["환경","hwangyeong","environment"],["오염","oyeom","pollution"],["재활용","jaehwallyong","recycle"],
+    ["폭풍","pokpung","storm"],["번개","beongae","lightning"],["가뭄","gamum","drought"],
+    ["습하다","seuphada","humid"],["온도","ondo","temperature"],["계절","gyejeol","season"],
+    ["장마철","jangmacheol","monsoon / rainy season"],["언덕","eondeok","hill"],["섬","seom","island"],
+    ["해변","haebyeon","beach"],["호수","hosu","lake"],["동물","dongmul","animal"],["식물","sikmul","plant"],
+    ["쓰레기","sseuregi","waste / rubbish"],["공기","gonggi","air"],["태양","taeyang","sun"]
+  ],
+  "House & Home": [
+    ["집","jip","house"],["침실","chimsil","bedroom"],["부엌","bueok","kitchen"],["욕실","yoksil","bathroom"],
+    ["거실","geosil","living room"],["창문","changmun","window"],["문","mun","door"],["책상","chaeksang","table / desk"],
+    ["의자","uija","chair"],["침대","chimdae","bed"],["거울","geoul","mirror"],["정원","jeongwon","garden"],
+    ["지붕","jibung","roof"],["벽","byeok","wall"],["주소","juso","address"],["열쇠","yeolsoe","key"],
+    ["바닥","badak","floor"],["계단","gyedan","stairs"],["차고","chago","garage"],["옷장","otjang","cupboard / wardrobe"],
+    ["냉장고","naengjanggo","refrigerator"],["세탁기","setakgi","washing machine"],["텔레비전","tellebijeon","television"],
+    ["선풍기","seonpunggi","fan"],["에어컨","eeokeon","air conditioner"],["전등","jeondeung","lamp / light"],
+    ["가구","gagu","furniture"],["집세","jipse","rent"],["이사하다","isahada","to move house"],["이웃","iut","neighbour"]
+  ],
+  "Numbers & Colours": [
+    ["하나","hana","one"],["둘","dul","two"],["셋","set","three"],["넷","net","four"],
+    ["다섯","daseot","five"],["빨간색","ppalgansaek","red"],["파란색","paransaek","blue"],["노란색","noransaek","yellow"],
+    ["초록색","choroksaek","green"],["검은색","geomeunsaek","black"],["흰색","huinsaek","white"],["색깔","saekkkal","colour"],
+    ["열","yeol","ten"],["백","baek","hundred"],["숫자","sutja","number"],["보라색","borasaek","purple"],
+    ["여섯","yeoseot","six"],["일곱","ilgop","seven"],["여덟","yeodeol","eight"],["아홉","ahop","nine"],
+    ["천","cheon","thousand"],["회색","hoesaek","grey"],["갈색","galsaek","brown"],["분홍색","bunhongsaek","pink"],
+    ["주황색","juhwangsaek","orange (colour)"],["첫 번째","cheot beonjjae","first"],["두 번째","du beonjjae","second"],["반","ban","half"]
+  ],
+  "Jobs & Occupations": [
+    ["변호사","byeonhosa","lawyer"],["경찰관","gyeongchalgwan","police officer"],["사업가","sabeopga","businessperson"],
+    ["농부","nongbu","farmer"],["어부","eobu","fisherman"],["군인","gunin","soldier"],["엔지니어","enjinieo","engineer"],
+    ["건축가","geonchukga","architect"],["근로자","geunroja","worker"],["사장","sajang","boss / employer"],
+    ["월급","wolgeup","salary"],["사무실","samusil","office"],["직업","jigeop","occupation / career"],
+    ["주부","jubu","housewife"],["간호사","ganhosa","nurse"],["회사원","hoesawon","office worker"],
+    ["비서","biseo","secretary"],["회계사","hoegyesa","accountant"],["택시 기사","taeksi gisa","taxi driver"],
+    ["요리사","yorisa","cook / chef"],["웨이터","weiteo","waiter / waitress"],["매니저","maenijeo","manager"],
+    ["공장 근로자","gongjang geunroja","factory worker"],["기자","gija","journalist"],["강사","gangsa","lecturer"],
+    ["과학자","gwahakja","scientist"],["화가","hwaga","painter / artist"],["음악가","eumakga","musician"],["작가","jakga","writer"]
+  ],
+  "Clothing": [
+    ["셔츠","syeocheu","shirt"],["반바지","banbaji","shorts"],["치마","chima","skirt"],["드레스","deureseu","dress"],
+    ["모자","moja","hat"],["목도리","mokdori","scarf"],["장갑","janggap","gloves"],["양말","yangmal","socks"],
+    ["벨트","belteu","belt"],["재킷","jaekit","jacket"],["스웨터","seuweteo","sweater"],["교복","gyobok","school uniform"],
+    ["패션","paesyeon","fashion"],["코트","koteu","coat"],["청바지","cheongbaji","jeans"],["우산","usan","umbrella"],
+    ["부츠","bucheu","boots"],["속옷","sogot","underwear"],["정장","jeongjang","suit"],["상의","sangui","top / blouse"],
+    ["티셔츠","tisyeocheu","T-shirt"],["반지","banji","ring"],["핸드백","haendeubaek","handbag"],["원피스","wonpiseu","dress (alt)"],
+    ["잠옷","jamot","pyjamas"],["슬리퍼","seullipeo","slippers"],["앞치마","apchima","apron"],["팔찌","paljji","bracelet"]
+  ],
+  "Emotions & Personality": [
+    ["기쁘다","gippeuda","happy"],["슬프다","seulpeuda","sad"],["화나다","hwanada","angry"],["무섭다","museopda","afraid"],
+    ["걱정하다","geokjeonghada","worried"],["지루하다","jiruhada","bored"],["피곤하다","pigonhada","tired"],
+    ["신나다","sinnada","excited"],["실망하다","silmanghada","disappointed"],["부끄럽다","bukkeureopda","shy"],
+    ["친절하다","chinjeolhada","friendly / kind"],["게으르다","geeureuda","lazy"],["부지런하다","bujireonhada","hardworking"],
+    ["정직하다","jeongjikhada","honest"],["참을성 있다","chameulseong itda","patient"],["똑똑하다","ttokttokhada","clever"],
+    ["예쁘다","yeppeuda","pretty"],["귀엽다","gwiyeopda","cute"],
+    ["만족하다","manjokhada","satisfied"],["자랑스럽다","jarangseureopda","proud"],["낙관적이다","nakgwanjeogida","optimistic"],
+    ["비관적이다","bigwanjeogida","pessimistic"],["용감하다","yonggamhada","brave"],["겁이 많다","geobi manta","timid / cowardly"],
+    ["자신감 있다","jasingam itda","confident"],["무례하다","muryehada","rude"],["예의 바르다","yeui bareuda","polite"],
+    ["호기심 많다","hogisim manta","curious"]
+  ],
+  "Communication & Technology": [
+    ["전화","jeonhwa","telephone"],["문자","munja","text message"],["이메일","imeil","email"],["인터넷","inteonet","internet"],
+    ["컴퓨터","keompyuteo","computer"],["소셜 미디어","syosyeol midieo","social media"],["웹사이트","wepsaiteu","website"],
+    ["애플리케이션","aepeullikeisyeon","application (app)"],["보내다","bonaeda","to send"],["받다","batda","to receive"],
+    ["전화하다","jeonhwahada","to call"],["답장하다","dapjanghada","to reply"],["비밀번호","bimilbeonho","password"],
+    ["화면","hwamyeon","screen"],["충전하다","chungjeonhada","to charge (battery)"],["계정","gyejeong","account"],
+    ["노트북","noteubuk","laptop"],["다운로드하다","daunrodeuhada","to download"],["업로드하다","eopeurodeuhada","to upload"],
+    ["프로필 사진","peuropil sajin","profile picture"],["팔로우하다","pallouhada","to follow (online)"],["좋아하다","joahada","to like"],
+    ["공유하다","gongyuhada","to share"],["연결","yeongyeol","connection"],["화상 통화","hwasang tonghwa","video call"],
+    ["태블릿","taebeullit","tablet"],["와이파이","waipai","wifi"],["스크린샷","seukeurinsyat","screenshot"]
+  ],
+  "Sports": [
+    ["축구","chukgu","football"],["배드민턴","baedeuminteon","badminton"],["탁구","takgu","table tennis"],
+    ["테니스","teniseu","tennis"],["농구","nonggu","basketball"],["달리기","dalligi","running"],["팀","tim","team"],
+    ["코치","kochi","coach"],["선수","seonsu","player"],["경기장","gyeonggijang","court / field / stadium"],
+    ["챔피언","chaempieon","champion"],["이기다","igida","to win"],["지다","jida","to lose"],["트로피","teuropi","trophy"],
+    ["훈련","hullyeon","training"],["체육관","cheyukgwan","gym / stadium"],
+    ["하키","haki","hockey"],["배구","baegu","volleyball"],["육상","yuksang","athletics"],
+    ["단체 스포츠","danche seupocheu","team sports"],["무승부","museungbu","draw / tie"],["기록","girok","record"],
+    ["선수권 대회","seonsugwon daehoe","championship"],["운동선수","undongseonsu","athlete"],["심판","simpan","referee"],
+    ["경기","gyeonggi","match / competition"],["체조","chejo","gymnastics"],["골프","golpeu","golf"]
+  ],
+  "Places & Directions": [
+    ["도시","dosi","city"],["마을","maeul","village"],["건물","geonmul","building"],["왼쪽","oenjjok","left"],
+    ["오른쪽","oreunjjok","right"],["직진하다","jikjinhada","go straight"],["돌다","dolda","to turn"],
+    ["북쪽","bukjjok","north"],["남쪽","namjjok","south"],["동쪽","dongjjok","east"],["서쪽","seojjok","west"],
+    ["근처","geuncheo","nearby"],["멀다","meolda","far"],["가깝다","gakkapda","near"],["사이","sai","between"],
+    ["공원","gongwon","park"],["박물관","bangmulgwan","museum"],
+    ["모스크","moseukeu","mosque"],["사원","sawon","temple"],["교회","gyohoe","church"],
+    ["교차로","gyocharo","intersection / junction"],["신호등","sinhodeung","traffic light"],["거리","geori","street"],
+    ["광장","gwangjang","square / plaza"],["중심","jungsim","center"],["교외","gyooe","suburb"],
+    ["수도","sudo","capital city"],["장소","jangso","place"]
+  ]
+};
+
+const LANGUAGES = {
+  my: {
+    key:"my", flag:"🇲🇾", name:"Bahasa Melayu", englishName:"Malay", script:"latin",
+    homeTitle:"Malay Vocabulary Quiz", homeSub:"IGCSE Malay as a Foreign Language vocabulary — 30-question MCQ tests with a results dashboard.",
+    directionNote:"Each test mixes Malay→English and English→Malay questions across your selected topics.",
+    nativeToEnLabel:"What does this word mean in English?",
+    enToNativeLabel:"How do you say this in Malay?",
+    topics: MALAY_TOPICS
+  },
+  zh: {
+    key:"zh", flag:"🇨🇳", name:"简体中文", englishName:"Chinese (Simplified)", script:"zh",
+    homeTitle:"Chinese Vocabulary Quiz", homeSub:"IGCSE Chinese as a Foreign Language vocabulary — 30-question MCQ tests with a results dashboard. Pinyin is shown throughout.",
+    directionNote:"Each test mixes Chinese→English and English→Chinese questions across your selected topics. Pinyin is shown on every Chinese word.",
+    nativeToEnLabel:"What does this word mean in English?",
+    enToNativeLabel:"Choose the correct word in Chinese.",
+    topics: CHINESE_TOPICS
+  },
+  ko: {
+    key:"ko", flag:"🇰🇷", name:"한국어", englishName:"Korean", script:"ko",
+    homeTitle:"Korean Vocabulary Quiz", homeSub:"IGCSE-style Korean vocabulary practice — 30-question MCQ tests with a results dashboard.",
+    directionNote:"Each test mixes Korean→English and English→Korean questions across your selected topics.",
+    nativeToEnLabel:"What does this word mean in English?",
+    enToNativeLabel:"Choose the correct word in Korean.",
+    topics: KOREAN_TOPICS
+  }
+};
+
+const CAT_COLORS = ["#E7C766","#C8372F","#6FAE8B","#7EA8D8","#D89B5C","#B884C9","#5CB3B0","#D6688A","#8FBF5B","#E39B4F","#7C93D6","#C9A6E0","#5FA8A0","#D1795F","#A0785A","#4F8FBF","#B25D8B","#7FB0A0"];
+function catColor(lang, name){ const keys=Object.keys(LANGUAGES[lang].topics); return CAT_COLORS[keys.indexOf(name)%CAT_COLORS.length]; }
+function wordCount(lang){ let n=0; Object.values(LANGUAGES[lang].topics).forEach(l=>n+=l.length); return n; }
+
+/* ============================= STATE ============================= */
+let currentLang = null;
+let questions = [];
+let currentIndex = 0;
+let score = 0;
+let answered = false;
+let TOTAL_Q = 30;
+const testsTakenByLang = { my:0, zh:0, ko:0 };
+const selectedTopics = { my:null, zh:null, ko:null };
+let catStats = {};
+
+/* ============================= HELPERS ============================= */
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function pickN(arr,n){ return shuffle(arr).slice(0,n); }
+function unpack(pair){
+  if(pair.length === 3) return {native: pair[0], roman: pair[1], en: pair[2]};
+  return {native: pair[0], roman: null, en: pair[1]};
+}
+
+function buildQuestionSet(){
+  const langDef = LANGUAGES[currentLang];
+  const cats = Array.from(selectedTopics[currentLang]);
+  let pool = [];
+  cats.forEach(cat=>{
+    langDef.topics[cat].forEach(pair=>{
+      const u = unpack(pair);
+      pool.push({cat, native:u.native, roman:u.roman, en:u.en});
+    });
+  });
+  pool = shuffle(pool);
+
+  TOTAL_Q = Math.min(30, pool.length);
+  const perCat = Math.floor(TOTAL_Q/cats.length);
+  let remainder = TOTAL_Q - perCat*cats.length;
+  let selected = [];
+  cats.forEach(cat=>{
+    const items = pool.filter(p=>p.cat===cat);
+    let take = perCat + (remainder>0?1:0);
+    if(remainder>0) remainder--;
+    selected = selected.concat(pickN(items, Math.min(take, items.length)));
+  });
+  selected = shuffle(selected).slice(0,TOTAL_Q);
+
+  return selected.map(item=>{
+    const direction = Math.random() < 0.5 ? "NATIVE_TO_EN" : "EN_TO_NATIVE";
+    const sameCatOthers = langDef.topics[item.cat].filter(p=>unpack(p).native !== item.native).map(unpack);
+    const distractors = pickN(sameCatOthers,3);
+    let correctAnswer, options, optionRoman = {};
+    if(direction === "NATIVE_TO_EN"){
+      correctAnswer = item.en;
+      options = shuffle([correctAnswer, ...distractors.map(d=>d.en)]);
+    } else {
+      correctAnswer = item.native;
+      options = shuffle([correctAnswer, ...distractors.map(d=>d.native)]);
+      distractors.forEach(d=>{ if(d.roman) optionRoman[d.native] = d.roman; });
+      if(item.roman) optionRoman[item.native] = item.roman;
+    }
+    return {
+      cat: item.cat, native: item.native, roman: item.roman, en: item.en,
+      direction, prompt: direction === "NATIVE_TO_EN" ? item.native : item.en,
+      correctAnswer, options, optionRoman
+    };
+  });
+}
+
+/* ============================= SCREENS ============================= */
+const $ = sel => document.querySelector(sel);
+const screens = { language: $("#screen-language"), start: $("#screen-start"), quiz: $("#screen-quiz"), results: $("#screen-results") };
+function showScreen(name){
+  Object.values(screens).forEach(s=>s.classList.add("hidden"));
+  screens[name].classList.remove("hidden");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function renderLanguageGrid(){
+  const grid = $("#langGrid");
+  grid.innerHTML = Object.values(LANGUAGES).map(l=>`
+    <button class="lang-card" data-lang="${l.key}">
+      <div class="lang-flag">${l.flag}</div>
+      <div class="lang-info">
+        <div class="lang-name">${l.englishName}</div>
+        <div class="lang-native">${l.name}</div>
+        <div class="lang-meta">${wordCount(l.key)} words · ${Object.keys(l.topics).length} topics</div>
+      </div>
+      <div class="lang-arrow">›</div>
+    </button>
+  `).join("");
+  grid.querySelectorAll(".lang-card").forEach(btn=>{
+    btn.addEventListener("click", ()=> selectLanguage(btn.dataset.lang));
+  });
+}
+
+function selectLanguage(langKey){
+  currentLang = langKey;
+  if(!selectedTopics[langKey]){
+    selectedTopics[langKey] = new Set(Object.keys(LANGUAGES[langKey].topics));
+  }
+  const l = LANGUAGES[langKey];
+  $("#pageTitle").textContent = l.homeTitle;
+  $("#pageSub").textContent = l.homeSub;
+  $("#directionNote").textContent = l.directionNote;
+  renderTopicChips();
+  showScreen("start");
+}
+
+function renderTopicChips(){
+  const l = LANGUAGES[currentLang];
+  const sel = selectedTopics[currentLang];
+  const wrap = $("#topicChips");
+  wrap.innerHTML = Object.keys(l.topics).map(cat=>{
+    const n = l.topics[cat].length;
+    const active = sel.has(cat) ? "active" : "";
+    return `<button class="topic-chip ${active}" data-cat="${cat}">${cat} <span style="opacity:.6;">(${n})</span></button>`;
+  }).join("");
+  wrap.querySelectorAll(".topic-chip").forEach(chip=>{
+    chip.addEventListener("click", ()=>{
+      const cat = chip.dataset.cat;
+      if(sel.has(cat)) sel.delete(cat); else sel.add(cat);
+      renderTopicChips();
+      updateStartStats();
+    });
+  });
+  $("#topicsHeading").textContent = `Choose topics — ${l.englishName}`;
+  updateStartStats();
+}
+
+function updateStartStats(){
+  const l = LANGUAGES[currentLang];
+  const sel = Array.from(selectedTopics[currentLang]);
+  let words = 0;
+  sel.forEach(cat => words += l.topics[cat].length);
+  const qCount = Math.min(30, words);
+  $("#bankCount").textContent = words;
+  $("#questionCountStat").textContent = sel.length ? qCount : 0;
+  $("#testsTaken").textContent = testsTakenByLang[currentLang];
+  $("#startBtn").disabled = sel.length === 0;
+  $("#topicWarning").classList.toggle("hidden", sel.length !== 0);
+}
+
+function scriptClass(){
+  const s = LANGUAGES[currentLang].script;
+  return s === "zh" ? "script-zh" : s === "ko" ? "script-ko" : "";
+}
+
+function startTest(){
+  if(selectedTopics[currentLang].size === 0) return;
+  questions = buildQuestionSet();
+  currentIndex = 0;
+  score = 0;
+  catStats = {};
+  Array.from(selectedTopics[currentLang]).forEach(cat=>{ catStats[cat] = {correct:0,total:0,misses:[]}; });
+  showScreen("quiz");
+  renderQuestion();
+}
+
+function renderQuestion(){
+  answered = false;
+  const q = questions[currentIndex];
+  const l = LANGUAGES[currentLang];
+  const isZh = currentLang === "zh";
+  $("#qCounter").textContent = `${currentIndex+1} / ${TOTAL_Q}`;
+  $("#progressFill").style.width = `${(currentIndex/TOTAL_Q)*100}%`;
+  $("#scoreLive").textContent = `${score} ✓`;
+  $("#catTag").textContent = q.cat;
+
+  const promptEl = $("#promptWord");
+  promptEl.textContent = q.prompt;
+  promptEl.className = "prompt-word " + (q.direction === "NATIVE_TO_EN" ? scriptClass() : "");
+
+  const romanEl = $("#promptRoman");
+  if(q.direction === "NATIVE_TO_EN" && q.roman){
+    romanEl.textContent = q.roman;
+    romanEl.classList.remove("hidden");
+  } else {
+    romanEl.textContent = "";
+    romanEl.classList.add("hidden");
+  }
+
+  $("#promptSub").textContent = q.direction === "NATIVE_TO_EN" ? l.nativeToEnLabel : l.enToNativeLabel;
+
+  const wrap = $("#choicesWrap");
+  wrap.innerHTML = "";
+  const letters = ["A","B","C","D"];
+  q.options.forEach((opt, i)=>{
+    const btn = document.createElement("button");
+    btn.className = "choice";
+    const isNativeOption = q.direction === "EN_TO_NATIVE";
+    const mainClass = isNativeOption ? scriptClass() : "";
+    let subHtml = "";
+    if(isNativeOption && isZh && q.optionRoman[opt]){
+      subHtml = `<div class="choice-sub">${q.optionRoman[opt]}</div>`;
+    }
+    btn.innerHTML = `<span class="letter">${letters[i]}</span><div class="choice-body"><div class="choice-main ${mainClass}">${opt}</div>${subHtml}</div>`;
+    btn.addEventListener("click", ()=>handleAnswer(opt, btn));
+    wrap.appendChild(btn);
+  });
+  $("#nextBtn").classList.add("hidden");
+}
+
+function handleAnswer(chosen, btnEl){
+  if(answered) return;
+  answered = true;
+  const q = questions[currentIndex];
+  const correct = chosen === q.correctAnswer;
+  catStats[q.cat].total++;
+  if(correct){
+    score++;
+    catStats[q.cat].correct++;
+  } else {
+    catStats[q.cat].misses.push({native:q.native, roman:q.roman, en:q.en, direction:q.direction, chosen});
+  }
+
+  document.querySelectorAll(".choice").forEach(el=>{
+    el.classList.add("disabled");
+    const label = el.querySelector(".choice-main").textContent;
+    if(label === q.correctAnswer) el.classList.add("correct");
+    else if(el === btnEl) el.classList.add("wrong");
+  });
+
+  $("#scoreLive").textContent = `${score} ✓`;
+  $("#nextBtn").classList.remove("hidden");
+  $("#nextBtn").textContent = currentIndex === TOTAL_Q-1 ? "See results →" : "Next →";
+}
+
+function nextQuestion(){
+  currentIndex++;
+  if(currentIndex >= TOTAL_Q){
+    $("#progressFill").style.width = `100%`;
+    finishTest();
+  } else {
+    renderQuestion();
+  }
+}
+
+function finishTest(){
+  testsTakenByLang[currentLang]++;
+  const pct = Math.round((score/TOTAL_Q)*100);
+  $("#scoreVal").textContent = score;
+  $("#scoreDen").textContent = `out of ${TOTAL_Q}`;
+  $("#scoreRing").style.setProperty("--pct", pct);
+  let msg;
+  if(pct>=90) msg = "Outstanding vocabulary command!";
+  else if(pct>=75) msg = "Strong grasp — a little polish to go.";
+  else if(pct>=55) msg = "Good foundation, keep revising.";
+  else msg = "Needs more practice — focus on the topics below.";
+  $("#scoreMsg").textContent = msg;
+
+  const catsSorted = Object.keys(catStats)
+    .filter(c=>catStats[c].total>0)
+    .sort((a,b)=> (catStats[b].correct/catStats[b].total) - (catStats[a].correct/catStats[a].total));
+
+  $("#barChart").innerHTML = catsSorted.map(cat=>{
+    const s = catStats[cat];
+    const p = Math.round((s.correct/s.total)*100);
+    return `<div class="bar-row">
+      <div class="bar-label">${cat}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${p}%; background:${catColor(currentLang,cat)}"></div></div>
+      <div class="bar-pct">${s.correct}/${s.total}</div>
+    </div>`;
+  }).join("");
+
+  const withData = catsSorted.map(cat=>({cat, pct: catStats[cat].correct/catStats[cat].total, s:catStats[cat]}));
+  const strongest = withData[0];
+  const weakest = withData[withData.length-1];
+
+  $("#strengthCallout").innerHTML = strongest
+    ? `<div class="callout strong">💪 <b>Strongest area: ${strongest.cat}</b> — ${strongest.s.correct}/${strongest.s.total} correct (${Math.round(strongest.pct*100)}%). This vocabulary is solid — keep it fresh with light review.</div>`
+    : "";
+  $("#weaknessCallout").innerHTML = weakest
+    ? `<div class="callout weak" style="margin-top:10px;">🎯 <b>Focus next: ${weakest.cat}</b> — ${weakest.s.correct}/${weakest.s.total} correct (${Math.round(weakest.pct*100)}%). Revise this topic's word list before the next test.</div>`
+    : "";
+
+  let misses = [];
+  Object.keys(catStats).forEach(cat=>{
+    catStats[cat].misses.forEach(m=> misses.push({cat, ...m}));
+  });
+  const reviewWrap = $("#reviewList");
+  if(misses.length === 0){
+    reviewWrap.innerHTML = `<div class="callout strong">No misses this round — perfect! 🎉</div>`;
+  } else {
+    reviewWrap.innerHTML = misses.map(m=>{
+      const nativeDisplay = m.roman ? `${m.native} (${m.roman})` : m.native;
+      const promptText = m.direction === "NATIVE_TO_EN" ? nativeDisplay : m.en;
+      const correctText = m.direction === "NATIVE_TO_EN" ? m.en : nativeDisplay;
+      return `<div class="review-item">
+        <div class="review-q">${promptText} <span style="color:rgba(246,241,228,0.4); font-weight:500;">(${m.cat})</span></div>
+        <div class="review-a"><span class="tag-x">You chose:</span> ${m.chosen} &nbsp;·&nbsp; <span class="tag-ok">Correct:</span> ${correctText}</div>
+      </div>`;
+    }).join("");
+  }
+
+  showScreen("results");
+}
+
+/* ============================= EVENTS ============================= */
+$("#startBtn").addEventListener("click", startTest);
+$("#nextBtn").addEventListener("click", nextQuestion);
+$("#retryBtn").addEventListener("click", startTest);
+$("#homeBtn").addEventListener("click", ()=>{ renderTopicChips(); showScreen("start"); });
+$("#backToLang").addEventListener("click", ()=> showScreen("language"));
+$("#switchLangBtn").addEventListener("click", ()=> showScreen("language"));
+$("#selectAllBtn").addEventListener("click", ()=>{
+  selectedTopics[currentLang] = new Set(Object.keys(LANGUAGES[currentLang].topics));
+  renderTopicChips();
+});
+$("#clearAllBtn").addEventListener("click", ()=>{
+  selectedTopics[currentLang] = new Set();
+  renderTopicChips();
+});
+
+renderLanguageGrid();
+showScreen("language");
+
+/* ============================= PWA: manifest + service worker ============================= */
+(function setupPWA(){
+  const manifest = {
+    name: "IGCSE Language Vocabulary Quiz",
+    short_name: "IGCSE Vocab",
+    start_url: ".",
+    display: "standalone",
+    background_color: "#0E2B24",
+    theme_color: "#173F35",
+    icons: [
+      { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%23173F35'/%3E%3Ctext x='96' y='128' font-size='108' text-anchor='middle' fill='%23E7C766'%3E%E2%9C%B7%3C/text%3E%3C/svg%3E", sizes: "192x192", type: "image/svg+xml" },
+      { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%23173F35'/%3E%3Ctext x='256' y='340' font-size='288' text-anchor='middle' fill='%23E7C766'%3E%E2%9C%B7%3C/text%3E%3C/svg%3E", sizes: "512x512", type: "image/svg+xml" }
+    ]
+  };
+  const manifestBlob = new Blob([JSON.stringify(manifest)], {type:"application/json"});
+  const link = document.createElement("link");
+  link.rel = "manifest";
+  link.href = URL.createObjectURL(manifestBlob);
+  document.head.appendChild(link);
+
+  if("serviceWorker" in navigator){
+    const swCode = `
+      const CACHE = "igcse-lang-quiz-v3";
+      self.addEventListener("install", e => self.skipWaiting());
+      self.addEventListener("activate", e => self.clients.claim());
+      self.addEventListener("fetch", e => {
+        e.respondWith(
+          caches.open(CACHE).then(cache =>
+            cache.match(e.request).then(resp => resp || fetch(e.request).then(netResp => {
+              cache.put(e.request, netResp.clone());
+              return netResp;
+            }).catch(()=> resp))
+          )
+        );
+      });
+    `;
+    const swBlob = new Blob([swCode], {type:"application/javascript"});
+    const swUrl = URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swUrl).catch(()=>{ /* offline caching unavailable in this context */ });
+  }
+})();
+</script>
+</body>
+</html>
